@@ -3,3 +3,10 @@ public class main {
         System.out.println("Hello World!");
     }
 }
+
+
+/*
+ Tutaj bede opisywal co chce
+ jest bardzo duzo rzeczy do zrobienia
+
+ */

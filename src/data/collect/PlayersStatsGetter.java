@@ -14,18 +14,8 @@ public class PlayersStatsGetter {
     public static void main(String[] args) {
         String websiteUrl = "https://fbref.com/en/squads/18bb7c10/2023-2024/all_comps/Arsenal-Stats-All-Competitions#all_stats_standard"; // Replace with the website URL you want to scrape
 
-        try {
-            Document doc = Jsoup.connect(websiteUrl).get();
-            Elements tables = doc.select("table");
-
-            for (Element table : tables) {
-                List<List<String>> tableData = extractTableData(table);
-                // Use the extracted tableData as needed
-                System.out.println("Extracted Table Data:\n" + tableData);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println(playersStats(websiteUrl));
+        System.out.println(playersStats("https://fbref.com/en/comps/9/stats/Premier-League-Stats", 0));
     }
 
     private static List<List<String>> extractTableData(Element table) {
@@ -43,6 +33,35 @@ public class PlayersStatsGetter {
         }
 
         return tableData;
+    }
+
+    private static List<List<String>> playersStats(String websiteUrl){
+        try {
+            Document doc = Jsoup.connect(websiteUrl).get();
+            Elements tables = doc.select("table");
+            Element table=tables.get(0);
+            List<List<String>> tableData = extractTableData(table);
+            return tableData;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static List<List<String>> playersStats(String websiteUrl, int whichTable){
+        try {
+            Document doc = Jsoup.connect(websiteUrl).get();
+            System.out.println(doc);
+            Elements tables = doc.select("table");
+            System.out.println(tables.size());
+            Element table=tables.get(whichTable);
+
+            List<List<String>> tableData = extractTableData(table);
+            return tableData;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
 
