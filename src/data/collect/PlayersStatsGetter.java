@@ -76,11 +76,11 @@ public class PlayersStatsGetter {
     }
 
     private static Table createTableFromListByColumns(List<List<String>> data, String tableName) {
-        int columns = data.get(0).size();
+        int columns = data.get(1).size();
         List<StringColumn> stringColumns = new ArrayList<>();
         Table table;
         // Create StringColumns for the table
-        for(int i=0;i<data.size();i++){
+        for(int i=1;i<data.size();i++){
             StringColumn stringColumn = StringColumn.create(data.get(i).get(0), data.get(i).subList(1, columns));
             stringColumns.add(stringColumn);
         }
