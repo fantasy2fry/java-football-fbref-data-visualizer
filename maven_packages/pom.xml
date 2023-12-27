@@ -35,6 +35,13 @@
             <version>LATEST</version>
         </dependency>
 
+        <dependency>
+            <groupId>tech.tablesaw</groupId>
+            <artifactId>tablesaw-html</artifactId>
+            <version>LATEST</version>
+        </dependency>
+
+
     </dependencies>
 
 </project>

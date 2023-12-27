@@ -4,18 +4,29 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import tech.tablesaw.api.StringColumn;
+import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
+import tech.tablesaw.io.DataFrameReader;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
 public class PlayersStatsGetter {
 
     public static void main(String[] args) {
         String websiteUrl = "https://fbref.com/en/squads/18bb7c10/2023-2024/all_comps/Arsenal-Stats-All-Competitions#all_stats_standard"; // Replace with the website URL you want to scrape
+        Table table;
+        List<List<String>> tableData = playersStats(websiteUrl);
+        System.out.println(tableData);
+        table=createTableFromListByColumns(tableData, "Players Stats");
+        System.out.println(table);
 
-        System.out.println(playersStats(websiteUrl));
-        System.out.println(playersStats("https://fbref.com/en/comps/9/stats/Premier-League-Stats", 0));
+        //System.out.println(playersStats("https://fbref.com/en/comps/9/stats/Premier-League-Stats", 0));
     }
 
     private static List<List<String>> extractTableData(Element table) {
@@ -62,6 +73,23 @@ public class PlayersStatsGetter {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private static Table createTableFromListByColumns(List<List<String>> data, String tableName) {
+        int columns = data.get(0).size();
+        List<StringColumn> stringColumns = new ArrayList<>();
+        Table table;
+        // Create StringColumns for the table
+        for(int i=0;i<data.size();i++){
+            StringColumn stringColumn = StringColumn.create(data.get(i).get(0), data.get(i).subList(1, columns));
+            stringColumns.add(stringColumn);
+        }
+        table = Table.create(tableName);
+        // Add the StringColumns to the table
+        for (StringColumn stringColumn : stringColumns) {
+            table.addColumns(stringColumn);
+        }
+        return table;
     }
 }
 
