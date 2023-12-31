@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.border.Border;
 
-public class App1 extends JFrame{
+public class App extends JFrame{
     private JPanel panelMain;
     private JTextField appDescription;
     private JButton buttonToStart;
@@ -17,7 +17,7 @@ public class App1 extends JFrame{
     private JCheckBox checkBox2;
 
 
-    public App1(){
+    public App(){
         panelChoose.setVisible(false);
         Border emptyBorder = BorderFactory.createEmptyBorder();
         appDescription.setBorder(emptyBorder);
