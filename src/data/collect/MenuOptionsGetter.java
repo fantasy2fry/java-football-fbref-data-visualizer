@@ -1,3 +1,4 @@
+/*
 package data.collect;
 
 import tech.tablesaw.api.Table;
@@ -10,3 +11,4 @@ public class MenuOptionsGetter {
         System.out.println(table);
     }
 }
+*/
