@@ -1,10 +1,13 @@
 package frames.visualization;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import javax.swing.border.Border;
 
 public class App extends JFrame{
@@ -15,6 +18,8 @@ public class App extends JFrame{
     private JCheckBox checkBox1;
     private JTextField llllllTextField;
     private JCheckBox checkBox2;
+
+    private ImageIcon mainBackground;
 
 
     public App(){
@@ -27,10 +32,10 @@ public class App extends JFrame{
 
         setTitle("Aplikacja do analiz piłkarskich");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        //setSize(400,400);
         // Pobranie rozmiarów ekranu
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         setSize(screenSize.width, screenSize.height);
+
 
         setContentPane(panelMain);
         setLocationRelativeTo(null);  //wyśrodkowanie aplikacji
