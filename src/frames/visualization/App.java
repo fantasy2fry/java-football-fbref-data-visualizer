@@ -15,9 +15,20 @@ public class App extends JFrame{
     private JTextField appDescription;
     private JButton buttonToStart;
     private JPanel panelChoose;
-    private JCheckBox checkBox1;
-    private JTextField llllllTextField;
-    private JCheckBox checkBox2;
+    private JTabbedPane tabbedPane1;
+    private JComboBox comboBox1;
+    private JComboBox comboBox2;
+    private JComboBox comboBox3;
+    private JComboBox comboBox4;
+    private JButton button2;
+    private JComboBox comboBox5;
+    private JButton button1;
+    private JComboBox comboBox6;
+    private JComboBox comboBox7;
+    private JComboBox comboBox8;
+    private JComboBox comboBox9;
+    private JComboBox comboBox10;
+    private JButton button3;
 
     private ImageIcon mainBackground;
 
