@@ -1,3 +1,4 @@
+
 package data.collect;
 
 import org.jsoup.Jsoup;

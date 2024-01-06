@@ -1,3 +1,4 @@
+
 package data.collect;
 
 import tech.tablesaw.api.Table;
