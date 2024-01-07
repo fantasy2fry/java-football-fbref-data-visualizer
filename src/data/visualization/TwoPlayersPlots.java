@@ -208,7 +208,7 @@ public class TwoPlayersPlots {
         // join two tables
         Table table=table1.append(table2);
         //PlayersStatsGetter.getImportantColumnIdsFromTable(table)
-        table=ready2Plot(table, new ArrayList<Integer>(List.of(4,5,7,8,9,10,11,12,13,16,17,18,19,20,21,22)));
+        table=ready2Plot(table, new ArrayList<Integer>(List.of(4,5,7,8,9,10,11,12,13,16,17,18,19)));
         table=twoPlayersPlotTranspose(table);
         //create String Array with two first columnNames()
         String[] columnNames=table.columnNames().toArray(new String[0]);
