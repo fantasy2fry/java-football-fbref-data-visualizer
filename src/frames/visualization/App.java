@@ -300,6 +300,12 @@ public class App extends JFrame{
                 Plot.show(plotTeam(club1, thePlotType, column));
             }
         });
+        stwórzWykresButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Plot.show(data.visualization.TwoPlayersPlots.twoPlayersPlot(getter.getPlayersStats(club1), getter.getPlayersStats(club2), player1, player2));
+            }
+        });
     }
 
 
