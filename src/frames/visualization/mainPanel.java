@@ -21,6 +21,7 @@ public class mainPanel extends JPanel {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
+        /*
         // Tworzenie i konfiguracja etykiety z tekstem
         JLabel label = new JLabel("Analiza danych piłkarskich", SwingConstants.CENTER);
         label.setFont(new Font("Century Gothic", Font.BOLD, 110));
@@ -32,6 +33,7 @@ public class mainPanel extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.anchor = GridBagConstraints.NORTH;
         add(label, gbc);
+         */
 
         /*
         // Tworzenie i konfiguracja przycisku START

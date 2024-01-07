@@ -115,8 +115,20 @@ public class App extends JFrame{
         panelMain = new mainPanel();
         panelMain.add(panelChoose);
 
-        // Tworzenie i konfiguracja przycisku START
+        // Tworzenie i konfiguracja etykiety z tekstem
         GridBagConstraints gbc = new GridBagConstraints();
+        JLabel label = new JLabel("Analiza danych piłkarskich", SwingConstants.CENTER);
+        label.setFont(new Font("Century Gothic", Font.BOLD, 110));
+        label.setForeground(new Color(28,28,28));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 0.6;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.anchor = GridBagConstraints.NORTH;
+        panelMain.add(label, gbc);
+
+        // Tworzenie i konfiguracja przycisku START
         startButton = new JButton("START");
         startButton.setPreferredSize(new Dimension(320, 130));
         startButton.setFont(new Font("Arial", Font.BOLD, 80));
@@ -128,9 +140,12 @@ public class App extends JFrame{
         startButton.setToolTipText("Kliknij, aby rozpocząć");
         gbc.gridx = 0;
         gbc.gridy = 1;
+        gbc.weighty = 0; // Zmniejsz wartość weighty dla przycisku
+        gbc.insets = new Insets(0, 0, 210, 0); // Dodaj margines od dolu, aby podnieść przycisk wyżej
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.CENTER;
         panelMain.add(startButton, gbc);
+
 
         panelChoose.setVisible(false);
 
