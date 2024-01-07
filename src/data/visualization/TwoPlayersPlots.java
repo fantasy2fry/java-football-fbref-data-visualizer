@@ -1,5 +1,6 @@
 package data.visualization;
 
+import data.collect.PlayersStatsGetter;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
 import tech.tablesaw.columns.numbers.NumberColumnFormatter;
@@ -16,6 +17,7 @@ import tech.tablesaw.selection.Selection;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static java.lang.Math.min;
@@ -26,8 +28,15 @@ public class TwoPlayersPlots {
         Table table = getter.getPlayersStats("Barcelona");
         Table table2 = getter.getPlayersStats("Arsenal");
         System.out.println(table);
-        Plot.show(slupkowyPodwojny(table,table2,7,"Barcelona", "Arsenal"));
-
+        System.out.println(ready2Plot(table, 7));
+        table=table.where(table.stringColumn(0).isEqualTo("Pedri"));
+        //Plot.show(slupkowyPodwojny(table,table2,7,"Barcelona", "Arsenal"));
+        System.out.println(table);
+        table=table.append(table2);
+        System.out.println(table);
+        System.out.println(PlayersStatsGetter.getImportantColumnIdsFromTable(table));
+        //System.out.println(twoPlayersPlot(table,table2,"Pedri","Bukayo Saka"));
+        Plot.show(twoPlayersPlot(table,table2,"Pedri","Bukayo Saka"));
 
 
     }
@@ -143,6 +152,84 @@ public class TwoPlayersPlots {
         }
         return StringColumn.create(nazwa,chlop);
     }
+    public static Table ready2Plot(Table t,List<Integer> ids){
+        Column<?> names=t.column(0);
+        Table ret=Table.create(names);
+        for(int id:ids){
+            StringColumn col= (StringColumn) t.column(id);
+            //take name of column
+            String name=col.name();
+            // take Strings to from column to List
+            List<String> list=col.asList();
+            // convert this list to list of doubles
+            List<Double> listDoubles=new ArrayList<>();
+            for(String str:list){
+                if(str==""){
+                    listDoubles.add(0.0);
+                }
+                else{
+                    int asc=(int)str.charAt(0);
+                    if(asc>47 && asc<58){
+                        listDoubles.add(Double.valueOf(str));
+                    }
+                }
+            }
+            // create new column with doubles
+            DoubleColumn dcol=DoubleColumn.create(name,listDoubles);
+            ret.addColumns(dcol);
+        }
+        return ret;
+    }
+    public static Table twoPlayersPlotTranspose(Table t){
+        //take column names
+        List<String> names=t.columnNames();
+        names.remove(0);
+        // take first column to List<String>
+        List<String> players=t.stringColumn(0).asList();
+        // remove first column from t
+        t=t.removeColumns(0);
+        // transpose table
+        t=t.transpose();
+        // change column names to players names
+        t.column(0).setName(players.get(0));
+        t.column(1).setName(players.get(1));
+        // create String Column with names
+        StringColumn namesColumn=StringColumn.create("Attr",names);
+        // add this column to table
+        t.addColumns(namesColumn);
+        return t;
+    }
 
-
+    public static Figure twoPlayersPlot(Table table1, Table table2, String player1, String player2){
+        // from first table take row with player1 in first column
+        table1=table1.where(table1.stringColumn(0).isEqualTo(player1));
+        // from second table take row with player2 in first column
+        table2=table2.where(table2.stringColumn(0).isEqualTo(player2));
+        // join two tables
+        Table table=table1.append(table2);
+        //PlayersStatsGetter.getImportantColumnIdsFromTable(table)
+        table=ready2Plot(table, new ArrayList<Integer>(List.of(4,5,7,8,9,10,11,12,13,16,17,18,19,20,21,22)));
+        table=twoPlayersPlotTranspose(table);
+        //create String Array with two first columnNames()
+        String[] columnNames=table.columnNames().toArray(new String[0]);
+        String[] columnNames2=new String[2];
+        columnNames2[0]=columnNames[0];
+        columnNames2[1]=columnNames[1];
+        return VerticalBarPlot.create(
+                "Stats for "+player1+" and "+player2,
+                table,
+                "Attr",
+                Layout.BarMode.GROUP,
+                columnNames2
+        );
+    }
+/*
+return VerticalBarPlot.create(
+                "Stats for "+player1+" and "+player2,
+                table,
+                "0 Player",
+                Layout.BarMode.GROUP,
+                table.columnNames().toArray(new String[0])
+        );
+ */
 }

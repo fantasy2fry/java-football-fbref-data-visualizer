@@ -26,6 +26,7 @@ public class PlayersStatsGetter {
         System.out.println(playersStatsGetter.getPlayersFromTable(table));
         System.out.println(playersStatsGetter.getAllClubNames());
         System.out.println(playersStatsGetter.getImportantColumnNamesFromTable(table));
+        System.out.println(playersStatsGetter.getImportantColumnIdsFromTable(table));
 
 //        String websiteUrl = "https://fbref.com/en/squads/18bb7c10/2023-2024/all_comps/Arsenal-Stats-All-Competitions#all_stats_standard"; // Replace with the website URL you want to scrape
 //        Table table;
@@ -164,11 +165,23 @@ public class PlayersStatsGetter {
         }
         return clubNames;
     }
-    public List<String> getImportantColumnNamesFromTable(Table table){
+    public static List<String> getImportantColumnNamesFromTable(Table table){
         // take 5th column na to 23rd column
         List<String> columnNames=table.columnNames();
         columnNames=columnNames.subList(4,23);
         return columnNames;
+    }
+    public static List<Integer> getImportantColumnIdsFromTable(Table t){
+        List<String> columnNames=getImportantColumnNamesFromTable(t);
+        // foreach String from List Take characters until space
+        List<Integer> columnIds=new ArrayList<>();
+        for (String columnName:columnNames) {
+            String id=columnName.substring(0, columnName.indexOf(" "));
+            columnIds.add(Integer.parseInt(id));
+        }
+        //remove 6
+        columnIds.remove(2);
+        return columnIds;
     }
 }
 
