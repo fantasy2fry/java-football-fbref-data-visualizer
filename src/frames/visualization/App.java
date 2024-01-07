@@ -110,28 +110,6 @@ public class App extends JFrame{
         return null;
     }
 
-    private void initialiseExample(){
-        clubsUrls.put("Arsenal","https://fbref.com/en/squads/18bb7c10/2023-2024/all_comps/Arsenal-Stats-All-Competitions#all_stats_standard");
-        clubsUrls.put("Barcelona", "https://fbref.com/en/squads/206d90db/2023-2024/all_comps/Barcelona-Stats-All-Competitions");
-        for (String club : clubsUrls.keySet()) {
-            comboBox1.addItem(club);
-            comboBox2.addItem(club);
-            comboBox3.addItem(club);
-            comboBox6.addItem(club);
-            comboBox8.addItem(club);
-        }
-        this.plotTypes = new ArrayList<>();
-        plotTypes.add("Słupkowy pionowy");
-        plotTypes.add("Słupkowy poziomy");
-        plotTypes.add("Kołowy");
-        plotTypes.add("Słupkowy podwójny");
-        for (String plotType : plotTypes) {
-            comboBox4.addItem(plotType);
-            comboBox5.addItem(plotType);
-            comboBox10.addItem(plotType);
-        }
-    }
-
     private void initialiseTeams(int id){
         if(id == 1){
             Table teamData = getter.getPlayersStats(club1);
@@ -141,7 +119,7 @@ public class App extends JFrame{
                 comboBox7.addItem(player);
             }
         } else if (id == 2) {
-            Table teamData = getter.getPlayersStats(club1);
+            Table teamData = getter.getPlayersStats(club2);
             playerNames2 = getter.getPlayersFromTable(teamData);
             comboBox9.removeAllItems();
             for (String player : playerNames2){
