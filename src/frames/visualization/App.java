@@ -1,5 +1,11 @@
 package frames.visualization;
 
+import data.collect.PlayersStatsGetter;
+import data.visualization.TwoPlayersPlots;
+import tech.tablesaw.api.Table;
+import tech.tablesaw.plotly.Plot;
+import tech.tablesaw.plotly.components.Figure;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -27,6 +33,9 @@ public class App extends JFrame{
     private JComboBox comboBox9;
     private JComboBox comboBox10;
     private JButton stwórzWykresButton;
+    private JComboBox comboBox11;
+    private JComboBox comboBox12;
+    private JComboBox comboBox13;
 
     private ImageIcon mainBackground;
 
@@ -37,25 +46,20 @@ public class App extends JFrame{
     private String club1;
     private String club2;
     private String thePlotType;
+    private String column;
     private String player1;
     private String player2;
-
     private Map<String, List<String>> footballTeams;
-
+    private List<String> clubNames;
+    private List<String> columnNames;
+    private List<String> playerNames1;
+    private List<String> playerNames2;
+    private data.collect.PlayersStatsGetter getter;
     public List<String> getPlayersForTeam(String team) {
         return footballTeams.getOrDefault(team, new ArrayList<>());
     }
 
-    private void initialiseExample(){
-        clubsUrls.put("Arsenal","https://fbref.com/en/squads/18bb7c10/2023-2024/all_comps/Arsenal-Stats-All-Competitions#all_stats_standard");
-        clubsUrls.put("Barcelona", "https://fbref.com/en/squads/206d90db/2023-2024/all_comps/Barcelona-Stats-All-Competitions");
-        for (String club : clubsUrls.keySet()) {
-            comboBox1.addItem(club);
-            comboBox2.addItem(club);
-            comboBox3.addItem(club);
-            comboBox6.addItem(club);
-            comboBox8.addItem(club);
-        }
+    private void initialiseData(){
         this.plotTypes = new ArrayList<>();
         plotTypes.add("Słupkowy pionowy");
         plotTypes.add("Słupkowy poziomy");
@@ -66,49 +70,68 @@ public class App extends JFrame{
             comboBox5.addItem(plotType);
             comboBox10.addItem(plotType);
         }
+        this.clubNames = getter.getAllClubNames();
+        for (String club : clubNames) {
+            comboBox1.addItem(club);
+            comboBox2.addItem(club);
+            comboBox3.addItem(club);
+            comboBox6.addItem(club);
+            comboBox8.addItem(club);
+        }
+        this.columnNames = getter.getImportantColumnNamesFromTable(getter.getPlayersStats("Real Madrid"));
+        for (String column : columnNames){
+            comboBox11.addItem(column);
+            comboBox12.addItem(column);
+            comboBox13.addItem(column);
+        }
     }
 
-    private void initialiseTeams(){
-        footballTeams = new HashMap<>();
-        List<String> arsenalPlayers = new ArrayList<>();
-        arsenalPlayers.add("William Saliba");
-        arsenalPlayers.add("Ben White");
-        arsenalPlayers.add("Gabriel");
-        arsenalPlayers.add("Jurrien Timber");
-        arsenalPlayers.add("Jakub Kiwior");
-        footballTeams.put("Arsenal", arsenalPlayers);
-        if(Objects.equals(club1, "Arsenal")){
-            for (String player : arsenalPlayers) {
-                comboBox7.addItem(player);;
-            }
+    public static int columnToId(String column) {
+        // Funkcja ma na celu zamianę nazwy kolumny na id potrzebne do stworzenia wykresu
+        java.util.regex.Matcher matcher = java.util.regex.Pattern.compile("\\d+").matcher(column);
+
+        if (matcher.find()) {
+            return Integer.parseInt(matcher.group());
+        } else {
+            return -1;
         }
-        if(Objects.equals(club2, "Arsenal")){
-            for (String player : arsenalPlayers) {
-                comboBox9.addItem(player);;
-            }
+    }
+
+    private Figure plotTeam(String club, String plotType, String column){
+        Table teamData = getter.getPlayersStats(club);
+        int id = columnToId(column);
+        if(plotType == "Kołowy"){
+            return data.visualization.TwoPlayersPlots.kolowy(teamData, id);
+        } else if (plotType == "Słupkowy pionowy") {
+            return data.visualization.TwoPlayersPlots.slupkowyPionowy(teamData, id);
+        } else if (plotType == "Słupkowy poziomy"){
+            return data.visualization.TwoPlayersPlots.slupkowyPoziomy(teamData, id);
         }
-        List<String> barcelonaPlayers = new ArrayList<>();
-        barcelonaPlayers.add("Robert Lewandowski");
-        barcelonaPlayers.add("Frenkie De Jong");
-        barcelonaPlayers.add("Ilkay Gundogan");
-        barcelonaPlayers.add("Angel Alarcon");
-        barcelonaPlayers.add("Marc Casado");
-        footballTeams.put("Barcelona", barcelonaPlayers);
-        if(Objects.equals(club1, "Barcelona")){
-            for (String player : barcelonaPlayers) {
-                comboBox7.addItem(player);;
+        return null;
+    }
+
+    private void initialiseTeams(int id){
+        if(id == 1){
+            Table teamData = getter.getPlayersStats(club1);
+            playerNames1 = getter.getPlayersFromTable(teamData);
+            comboBox7.removeAllItems();
+            for (String player : playerNames1){
+                comboBox7.addItem(player);
             }
-        }
-        if(Objects.equals(club2, "Barcelona")){
-            for (String player : barcelonaPlayers) {
-                comboBox9.addItem(player);;
+        } else if (id == 2) {
+            Table teamData = getter.getPlayersStats(club2);
+            playerNames2 = getter.getPlayersFromTable(teamData);
+            comboBox9.removeAllItems();
+            for (String player : playerNames2){
+                comboBox9.addItem(player);
             }
         }
     }
 
 
     public App(){
-        initialiseExample();
+        this.getter = new PlayersStatsGetter();
+        initialiseData();
 
         panelChoose.setVisible(false);
         Border emptyBorder = BorderFactory.createEmptyBorder();
@@ -195,7 +218,7 @@ public class App extends JFrame{
                 String selectedClub = (String) comboBox6.getSelectedItem();
                 if (selectedClub != null) {
                     club1 = selectedClub;
-                    initialiseTeams();
+                    initialiseTeams(1);
                 }
             }
         });
@@ -216,7 +239,7 @@ public class App extends JFrame{
                 String selectedClub = (String) comboBox8.getSelectedItem();
                 if (selectedClub != null) {
                     club2 = selectedClub;
-                    initialiseTeams();
+                    initialiseTeams(2);
                 }
             }
         });
@@ -238,6 +261,43 @@ public class App extends JFrame{
                 if (selectedPlotType != null) {
                     thePlotType = selectedPlotType;
                 }
+            }
+        });
+
+        comboBox11.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedColumn = (String) comboBox11.getSelectedItem();
+                if (selectedColumn != null) {
+                    column = selectedColumn;
+                }
+            }
+        });
+
+        comboBox12.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedColumn = (String) comboBox12.getSelectedItem();
+                if (selectedColumn != null) {
+                    column = selectedColumn;
+                }
+            }
+        });
+
+        comboBox13.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedColumn = (String) comboBox13.getSelectedItem();
+                if (selectedColumn != null) {
+                    column = selectedColumn;
+                }
+            }
+        });
+
+        stwórzWykresButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Plot.show(plotTeam(club1, thePlotType, column));
             }
         });
     }
