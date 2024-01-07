@@ -7,11 +7,13 @@ import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
 import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 public class App extends JFrame{
     private JPanel panelMain;
     private JTextField appDescription;
     private JButton buttonToStart;
+    private JButton startButton;
     private JPanel panelChoose;
     private JTabbedPane tabbedPane1;
     private JComboBox comboBox1;
@@ -110,26 +112,40 @@ public class App extends JFrame{
     public App(){
         initialiseExample();
 
+        panelMain = new mainPanel();
+        panelMain.add(panelChoose);
+
+        // Tworzenie i konfiguracja przycisku START
+        GridBagConstraints gbc = new GridBagConstraints();
+        startButton = new JButton("START");
+        startButton.setPreferredSize(new Dimension(320, 130));
+        startButton.setFont(new Font("Arial", Font.BOLD, 80));
+        startButton.setFocusPainted(false);
+        startButton.setForeground(Color.BLACK); // Kolor tekstu przycisku na czarny
+        startButton.setOpaque(false); // Ustawienie przycisku jako nieprzezroczystego
+        startButton.setContentAreaFilled(false); // Wyłączenie wypełnienia tła
+        startButton.setBorder(new LineBorder(Color.BLACK, 7)); // Czarne obramowanie
+        startButton.setToolTipText("Kliknij, aby rozpocząć");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panelMain.add(startButton, gbc);
+
         panelChoose.setVisible(false);
-        Border emptyBorder = BorderFactory.createEmptyBorder();
-        appDescription.setBorder(emptyBorder);
-        //buttonToStart.setBorderPainted(false);
-        buttonToStart.setFocusPainted(false);
 
 
+        // ustawienia aplikacji
         setTitle("Aplikacja do analiz piłkarskich");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         // Pobranie rozmiarów ekranu
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        setSize(screenSize.width, screenSize.height);
-
-
+        setSize(screenSize.width, screenSize.height-50);
         setContentPane(panelMain);
         setLocationRelativeTo(null);  //wyśrodkowanie aplikacji
         setVisible(true);
 
-
-        buttonToStart.addActionListener(new ActionListener() {
+        startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setContentPane(panelChoose);
