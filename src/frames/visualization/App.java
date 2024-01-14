@@ -78,7 +78,7 @@ public class App extends JFrame{
             comboBox6.addItem(club);
             comboBox8.addItem(club);
         }
-        this.columnNames = getter.getImportantColumnNamesFromTable(getter.getPlayersStats("Real Madrid"));
+        this.columnNames = getter.getImportantColumnNamesFromTable(getter.getPlayersStats("Real Madrid - Sezon 23/24"));
         for (String column : columnNames){
             comboBox11.addItem(column);
             comboBox12.addItem(column);
