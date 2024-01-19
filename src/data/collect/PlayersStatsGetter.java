@@ -13,10 +13,16 @@ import tech.tablesaw.io.DataFrameReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Stream;
-
+/**
+ * This class is used to get player statistics from various football clubs.
+ * It scrapes data from the website fbref.com and stores it in a Table object.
+ */
 public class PlayersStatsGetter {
     private Map<String, String> clubsUrls=new TreeMap<>();
-
+    /**
+     * Main method used for testing purposes.
+     * @param args
+     */
     public static void main(String[] args) {
         PlayersStatsGetter playersStatsGetter=new PlayersStatsGetter();
         Table table=playersStatsGetter.getPlayersStats("Napoli");
@@ -44,6 +50,10 @@ public class PlayersStatsGetter {
 //        System.out.println(table);
         //System.out.println(playersStats("https://fbref.com/en/comps/9/stats/Premier-League-Stats", 0));
     }
+    /**
+     * Constructor for the PlayersStatsGetter class.
+     * It initializes the clubsUrls map with the names of the clubs and their respective urls.
+     */
     public PlayersStatsGetter(){
         clubsUrls.put("Arsenal - Sezon 23/24","https://fbref.com/en/squads/18bb7c10/2023-2024/all_comps/Arsenal-Stats-All-Competitions#all_stats_standard");
         clubsUrls.put("Arsenal - Sezon 22/23","https://fbref.com/en/squads/18bb7c10/2022-2023/all_comps/Arsenal-Stats-All-Competitions");
@@ -149,6 +159,11 @@ public class PlayersStatsGetter {
         clubsUrls.put("Borussia Dortmund - Sezon 21/22","https://fbref.com/en/squads/add600ae/2021-2022/all_comps/Dortmund-Stats-All-Competitions");
     }
 
+    /**
+     * This method returns a Table object containing the players statistics for a given club.
+     * @param clubName The name of the club for which the statistics are returned.
+     * @return Table object containing the players statistics for a given club.
+     */
     public Table getPlayersStats(String clubName){
         String websiteUrl=clubsUrls.get(clubName);
         List<List<String>> tableData = playersStats(websiteUrl);
@@ -156,6 +171,12 @@ public class PlayersStatsGetter {
         return table;
     }
 
+    /**
+     * This method returns a List of Lists of Strings containing the players statistics for a given club.
+     * This is part of changing the data into something more useful.
+     * @param table is object containing information about players scraped from fbref.com
+     * @return List of Lists of Strings containing players statistics for a given club.
+     */
     private static List<List<String>> extractTableData(Element table) {
         List<List<String>> tableData = new ArrayList<>();
 
@@ -173,6 +194,12 @@ public class PlayersStatsGetter {
         return tableData;
     }
 
+    /**
+     * This function takes url of websites chooses tables from html of website
+     * and then chooses first table and transforms it to List of Lists of Strings.
+     * @param websiteUrl is url of website from which we want to take data.
+     * @return List of Lists of Strings containing players statistics for a given club prepaired to create Table object.
+     */
     private static List<List<String>> playersStats(String websiteUrl){
         try {
             Document doc = Jsoup.connect(websiteUrl).get();
@@ -186,6 +213,13 @@ public class PlayersStatsGetter {
         return null;
     }
 
+    /**
+     * This function takes url of websites chooses tables from html of website
+     * and then takes chosen table and transforms it to List of Lists of Strings. Currently not used in the project.
+     * @param websiteUrl is url of website from which we want to take data.
+     * @param whichTable is number of table we want to take from website.
+     * @return List of Lists of Strings containing players statistics for a given club prepaired to create Table object.
+     */
     private static List<List<String>> playersStats(String websiteUrl, int whichTable){
         try {
             Document doc = Jsoup.connect(websiteUrl).get();
@@ -202,6 +236,15 @@ public class PlayersStatsGetter {
         return null;
     }
 
+    /**
+     * This function takes List of Lists of Strings and creates Table object from it by columns.
+     * It propably omits first row of data.
+     * Currently not used in the project.
+     * @param data is List of Lists of Strings containing players statistics for a given club
+     *             prepaired to create Table object.
+     * @param tableName is name of table we want to create.
+     * @return Table object containing players statistics for a given club ready to use, transform, etc.
+     */
     private static Table createTableFromListByColumns(List<List<String>> data, String tableName) {
         int columns = data.get(1).size();
         List<StringColumn> stringColumns = new ArrayList<>();
@@ -218,6 +261,14 @@ public class PlayersStatsGetter {
         }
         return table;
     }
+
+    /**
+     * This function takes List of Lists of Strings and creates Table object from it by rows.
+     * It propably omits first column of data.
+     * @param data is List of Lists of Strings containing players statistics for a given club
+     * @param tableName is name of table we want to create.
+     * @return Table object containing players statistics for a given club ready to use, transform, etc.
+     */
     private static Table createTableFromListByRows(List<List<String>> data, String tableName) {
         int columns =data.get(1).size();
         int rows= data.size();
@@ -234,6 +285,12 @@ public class PlayersStatsGetter {
         return table;
     }
 
+    /**
+     * This function takes Table object and returns List of Strings containing names of players from this table.
+     * (In practice it takes all strings from StringColumn with index 0 from the table)
+     * @param table is Table object containing players statistics for a given club.
+     * @return  List of Strings containing names of players from this table.
+     */
     public List<String> getPlayersFromTable(Table table){
         List<String> players=new ArrayList<>();
         StringColumn stringColumn=table.stringColumn(0);
@@ -242,6 +299,12 @@ public class PlayersStatsGetter {
         }
         return players;
     }
+
+    /**
+     * This function returns List of Strings containing names of all clubs for which we have data.
+     * In practice, it takes all keys from clubsUrls TreeMap and returns them as List of Strings.
+     * @return List of Strings containing names of all clubs for which we have data.
+     */
     public List<String> getAllClubNames(){
         List<String> clubNames=new ArrayList<>();
         for (String clubName:clubsUrls.keySet()) {
@@ -249,12 +312,26 @@ public class PlayersStatsGetter {
         }
         return clubNames;
     }
+
+    /**
+     * This function returns Names of columns which are important for us, which means that they contain
+     * statistics about players, which we want to use in our project and visualizations.
+     * @param table is Table object containing players statistics for a given club.
+     * @return List of Strings containing names of columns which are important for us.
+     */
     public static List<String> getImportantColumnNamesFromTable(Table table){
         // take 5th column na to 23rd column
         List<String> columnNames=table.columnNames();
         columnNames=columnNames.subList(4,23);
         return columnNames;
     }
+
+    /**
+     * This function returns Ids of columns which are important for us, which means that they contain
+     * statistics about players, which we want to use in our project and visualizations.
+     * @param t is Table object containing players statistics for a given club.
+     * @return List of Integers containing Ids of columns which are important for us.
+     */
     public static List<Integer> getImportantColumnIdsFromTable(Table t){
         List<String> columnNames=getImportantColumnNamesFromTable(t);
         // foreach String from List Take characters until space
