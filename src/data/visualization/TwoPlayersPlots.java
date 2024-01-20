@@ -23,15 +23,14 @@ import java.util.List;
 import static java.lang.Math.min;
 
 public class TwoPlayersPlots {
-    public static final ArrayList<String> columnNames = new ArrayList<String>(List.of("n","n", "n", "n","Matches Played","Matches Played From Start", "n", "Full Match Equivalent", "Goals", "Assist", "Goals + Assists", "Non-Penalty Goals", "Penalty Kicks Made", "Penalty Kicks Attempted", "Yellow Cards", "Red Cards", "Expected Goals", "Non-Penalty Expected Goals", "Expected Assisted Goals", "Non-Penalty Expected Goals + Assisted Goals", "Progressive Carries", "Progressive Passes", "Progressive Passes Received"));
+    public static final ArrayList<String> columnNames = new ArrayList<String>(List.of("n","n", "n", "n","Matches Played","Matches Played From Start", "n", "Full Match Equivalent", "Goals", "Assists", "Goals + Assists", "Non-Penalty Goals", "Penalty Kicks Made", "Penalty Kicks Attempted", "Yellow Cards", "Red Cards", "Expected Goals", "Non-Penalty Expected Goals", "Expected Assisted Goals", "Non-Penalty Expected Goals + Assisted Goals", "Progressive Carries", "Progressive Passes", "Progressive Passes Received"));
     public static void main(String[] args) {
         data.collect.PlayersStatsGetter getter = new data.collect.PlayersStatsGetter();
-        Table table = getter.getPlayersStats("Barcelona - Sezon 23/24");
+        Table table = getter.getPlayersStats("Barcelona - Sezon 21/22");
         Table table2 = getter.getPlayersStats("Bayern Munich - Sezon 21/22");
-        Table t=table.where(table.stringColumn(0).isEqualTo("Robert Lewandowski") );
-        Table t2=table2.where(table2.stringColumn(0).isEqualTo("Robert Lewandowski") );
+        Plot.show(twoTeamsPlot(table,table2));
 
-        System.out.println(callMeMoron(table));
+
 
 
         //System.out.println(ready2Plot(table, 7));
@@ -81,7 +80,9 @@ public class TwoPlayersPlots {
     }
     public static Figure slupkowyPionowy(Table table, int id)
     {
+        table=callMeMoron(table);
         Table doRoboty = ready2Plot(table,id);
+        System.out.println(doRoboty);
         String[] namy=doRoboty.columnNames().toArray(new String[0]);
         String nazwadan=namy[1];
         return VerticalBarPlot.create(
@@ -94,6 +95,7 @@ public class TwoPlayersPlots {
     }
     public static Figure slupkowyPoziomy(Table table, int id)
     {
+        table=callMeMoron(table);
         Table doRoboty = ready2Plot(table,id);
         String[] namy=doRoboty.columnNames().toArray(new String[0]);
         String nazwadan=namy[1];
@@ -246,6 +248,50 @@ public class TwoPlayersPlots {
                 Layout.BarMode.GROUP,
                 columnNames2
         );
+    }
+    public static Figure twoTeamsPlot(Table team1, Table team2)
+    {
+        team1=callMeMoron(team1);
+        team2=callMeMoron(team2);
+        String s1=team1.name();
+        String s2=team2.name();
+        team1=ready2Plot(team1, new ArrayList<Integer>(List.of(8,9,10,11,12,13,14,15,16,17,18,19)));
+        team2=ready2Plot(team2, new ArrayList<Integer>(List.of(8,9,10,11,12,13,14,15,16,17,18,19)));
+        team1=team1.removeColumns(0);
+        team2=team2.removeColumns(0);
+        Column parameterNames = StringColumn.create("Parameter Name");
+        DoubleColumn team1Values = DoubleColumn.create(s1);
+        DoubleColumn team2Values = DoubleColumn.create(s2);
+        DoubleColumn robota;
+        Double suma;
+        for(int i=0; i<12; i++)
+        {
+            parameterNames.append(columnNames.get(i+8));
+            robota = (DoubleColumn) team1.column(i);
+            suma= robota.sum();
+            team1Values.append(suma);
+            robota =(DoubleColumn) team2.column(i);
+            suma= robota.sum();
+            team2Values.append(suma);
+
+
+        }
+        Table wyn=Table.create(parameterNames,team1Values, team2Values);
+        wyn.setName(s1+" and "+s2+" comparison");
+
+
+        String[] nColNames = new String[2];
+        nColNames[0]=s1;
+        nColNames[1]=s2;
+
+        return VerticalBarPlot.create(
+                wyn.name(),
+                wyn,
+                "Parameter Name",
+                Layout.BarMode.GROUP,
+                nColNames
+        );
+
     }
 /*
 return VerticalBarPlot.create(
