@@ -337,6 +337,14 @@ public class App extends JFrame{
                 Plot.show(data.visualization.TwoPlayersPlots.twoPlayersPlot(getter.getPlayersStats(club1), getter.getPlayersStats(club2), player1, player2));
             }
         });
+        stwórzWykresButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Table team1=getter.getPlayersStats(club1);
+                Table team2=getter.getPlayersStats(club2);
+                Plot.show(data.visualization.TwoPlayersPlots.twoTeamsPlot(team1,team2));
+            }
+        });
     }
 
 

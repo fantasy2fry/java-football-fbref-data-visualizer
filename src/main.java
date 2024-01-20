@@ -7,10 +7,3 @@ public class main {
         App app = new App();
     }
 }
-
-
-/*
- Tutaj bede opisywal co chce
- jest bardzo duzo rzeczy do zrobienia
-
- */
