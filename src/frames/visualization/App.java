@@ -138,20 +138,6 @@ public class App extends JFrame{
         panelMain = new mainPanel();
         panelMain.add(panelChoose);
 
-        //GridBagConstraints gbc = new GridBagConstraints();
-        /*// Tworzenie i konfiguracja etykiety z tekstem
-        JLabel label = new JLabel("Football analyses", SwingConstants.CENTER);
-        label.setFont(new Font("Sanchez", Font.PLAIN, 160));
-        label.setForeground(new Color(28,28,28));
-        gbc.insets = new Insets(-50, 0, 0, 0);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 0;
-        gbc.weighty = 0;
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.anchor = GridBagConstraints.NORTH;
-        panelMain.add(label, gbc);*/
-
         // Tworzenie i konfiguracja przycisku START
         startButton = new JButton("START");
         startButton.setFont(new Font("Arial", Font.PLAIN, 80));
@@ -172,9 +158,7 @@ public class App extends JFrame{
         gbcStartButton.anchor = GridBagConstraints.CENTER;
         panelMain.add(startButton, gbcStartButton);
 
-
         panelChoose.setVisible(false);
-
 
         // ustawienia aplikacji
         setTitle("Football analysis application");
@@ -183,7 +167,7 @@ public class App extends JFrame{
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         setSize(screenSize.width, screenSize.height-50);
         setContentPane(panelMain);
-        setLocationRelativeTo(null);  //wyśrodkowanie aplikacji
+        setLocationRelativeTo(null);
         setVisible(true);
 
         startButton.addActionListener(new ActionListener() {
