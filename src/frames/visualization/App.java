@@ -333,7 +333,8 @@ public class App extends JFrame{
         stwórzWykresButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Plot.show(plotTeam(club1, thePlotType, characteristicToColumn(characteristic)));
+                column = characteristicToColumn(characteristic);
+                Plot.show(plotTeam(club1, thePlotType, column));
             }
         });
         stwórzWykresButton.addActionListener(new ActionListener() {
