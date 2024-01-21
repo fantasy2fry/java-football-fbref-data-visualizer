@@ -166,43 +166,46 @@ public class App extends JFrame{
         panelMain = new mainPanel();
         panelMain.add(panelChoose);
 
-        // Tworzenie i konfiguracja etykiety z tekstem
-        GridBagConstraints gbc = new GridBagConstraints();
-        JLabel label = new JLabel("Analiza danych piłkarskich", SwingConstants.CENTER);
-        label.setFont(new Font("Century Gothic", Font.BOLD, 110));
+        //GridBagConstraints gbc = new GridBagConstraints();
+        /*// Tworzenie i konfiguracja etykiety z tekstem
+        JLabel label = new JLabel("Football analyses", SwingConstants.CENTER);
+        label.setFont(new Font("Sanchez", Font.PLAIN, 160));
         label.setForeground(new Color(28,28,28));
+        gbc.insets = new Insets(-50, 0, 0, 0);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.weightx = 1;
-        gbc.weighty = 0.6;
+        gbc.weightx = 0;
+        gbc.weighty = 0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.anchor = GridBagConstraints.NORTH;
-        panelMain.add(label, gbc);
+        panelMain.add(label, gbc);*/
 
         // Tworzenie i konfiguracja przycisku START
         startButton = new JButton("START");
-        startButton.setPreferredSize(new Dimension(320, 130));
-        startButton.setFont(new Font("Arial", Font.BOLD, 80));
+        startButton.setFont(new Font("Arial", Font.PLAIN, 80));
+        startButton.setPreferredSize(new Dimension(350, 140));
         startButton.setFocusPainted(false);
-        startButton.setForeground(Color.BLACK); // Kolor tekstu przycisku na czarny
-        startButton.setOpaque(false); // Ustawienie przycisku jako nieprzezroczystego
-        startButton.setContentAreaFilled(false); // Wyłączenie wypełnienia tła
-        startButton.setBorder(new LineBorder(Color.BLACK, 7)); // Czarne obramowanie
-        startButton.setToolTipText("Kliknij, aby rozpocząć");
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.weighty = 0; // Zmniejsz wartość weighty dla przycisku
-        gbc.insets = new Insets(0, 0, 210, 0); // Dodaj margines od dolu, aby podnieść przycisk wyżej
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.anchor = GridBagConstraints.CENTER;
-        panelMain.add(startButton, gbc);
+        startButton.setForeground(Color.BLACK);
+        startButton.setOpaque(false);
+        startButton.setContentAreaFilled(false);
+        startButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 7));
+        startButton.setToolTipText("Click to start");
+
+        GridBagConstraints gbcStartButton = new GridBagConstraints();
+        gbcStartButton.gridx = 0;
+        gbcStartButton.gridy = 1;
+        gbcStartButton.weightx = 1;
+        gbcStartButton.weighty = 1;
+        gbcStartButton.fill = GridBagConstraints.NONE;
+        gbcStartButton.anchor = GridBagConstraints.CENTER;
+        panelMain.add(startButton, gbcStartButton);
 
 
         panelChoose.setVisible(false);
 
 
         // ustawienia aplikacji
-        setTitle("Aplikacja do analiz piłkarskich");
+        setTitle("Football analysis application");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         // Pobranie rozmiarów ekranu
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
