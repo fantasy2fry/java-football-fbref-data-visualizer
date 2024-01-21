@@ -1,7 +1,6 @@
 package frames.visualization;
 
 import data.collect.PlayersStatsGetter;
-import data.visualization.TwoPlayersPlots;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.plotly.Plot;
 import tech.tablesaw.plotly.components.Figure;
@@ -12,9 +11,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
+/**
+ * This class is used to create user interface
+ * and to generate plots according to the inputs given by the user
+ */
 public class App extends JFrame{
     private JPanel panelMain;
     private JTextField appDescription;
@@ -24,9 +26,6 @@ public class App extends JFrame{
     private JTabbedPane tabbedPane1;
     private JComboBox comboBox1;
     private JComboBox comboBox2;
-    private JComboBox comboBox3;
-    private JComboBox comboBox4;
-    private JButton stwórzWykresButton2;
     private JComboBox comboBox5;
     private JButton stwórzWykresButton1;
     private JComboBox comboBox6;
@@ -35,7 +34,10 @@ public class App extends JFrame{
     private JComboBox comboBox9;
     private JComboBox comboBox10;
     private JButton stwórzWykresButton;
+    private JComboBox comboBox4;
+    private JComboBox comboBox3;
     private JComboBox comboBox11;
+    private JButton stwórzWykresButton2;
     private JComboBox comboBox12;
     private JComboBox comboBox13;
 
@@ -61,16 +63,17 @@ public class App extends JFrame{
         return footballTeams.getOrDefault(team, new ArrayList<>());
     }
 
+    /**
+     * This method is used to initialise data in the app.
+     * More precisely it adds values to comboBoxes and it sets default values
+     */
     private void initialiseData(){
         this.plotTypes = new ArrayList<>();
-        plotTypes.add("Słupkowy pionowy");
-        plotTypes.add("Słupkowy poziomy");
-        plotTypes.add("Kołowy");
-        plotTypes.add("Słupkowy podwójny");
+        plotTypes.add("Vertical bar chart");
+        plotTypes.add("Horizontal bar chart");
+        plotTypes.add("Pie chart");
         for (String plotType : plotTypes) {
             comboBox4.addItem(plotType);
-            comboBox5.addItem(plotType);
-            comboBox10.addItem(plotType);
         }
         this.clubNames = getter.getAllClubNames();
         for (String club : clubNames) {
@@ -83,11 +86,19 @@ public class App extends JFrame{
         this.columnNames = getter.getImportantColumnNamesFromTable(getter.getPlayersStats("Real Madrid - Sezon 23/24"));
         for (String column : columnNames){
             comboBox11.addItem(column);
-            comboBox12.addItem(column);
-            comboBox13.addItem(column);
         }
+        // Ustalenie domyślnych danych
+        club1 = clubNames.get(0);
+        club2 = clubNames.get(0);
+        thePlotType = plotTypes.get(0);
+        column = columnNames.get(0);
     }
 
+    /**
+     * Method that transforms column name (String) into id (int) that is used in other methods
+     * @param column is the characteristic that user wants to analyse on the plot
+     * @return int id used in other methods, it represents a specific characteristic
+     */
     public static int columnToId(String column) {
         // Funkcja ma na celu zamianę nazwy kolumny na id potrzebne do stworzenia wykresu
         java.util.regex.Matcher matcher = java.util.regex.Pattern.compile("\\d+").matcher(column);
@@ -99,19 +110,33 @@ public class App extends JFrame{
         }
     }
 
+    /**
+     * Method used to plot a chart according to the plot type selected by the user
+     * @param club is a club chosen (or default) by the user
+     * @param plotType is a type of plot chosen by the user
+     * @param column is the characteristic that user chose to analyse
+     * @return Figure that displays value of a selected characteristic for a chosen club in the
+     * form of the selcted plot type
+     */
     private Figure plotTeam(String club, String plotType, String column){
         Table teamData = getter.getPlayersStats(club);
         int id = columnToId(column);
-        if(plotType == "Kołowy"){
+        if(plotType == "Pie chart"){
             return data.visualization.TwoPlayersPlots.kolowy(teamData, id);
-        } else if (plotType == "Słupkowy pionowy") {
+        } else if (plotType == "Vertical bar chart") {
             return data.visualization.TwoPlayersPlots.slupkowyPionowy(teamData, id);
-        } else if (plotType == "Słupkowy poziomy"){
+        } else if (plotType == "Horizontal bar chart"){
             return data.visualization.TwoPlayersPlots.slupkowyPoziomy(teamData, id);
         }
         return null;
     }
 
+    /**
+     * Method used to initialise players data in the comboboxes
+     * according to the clubs user chose beforehand
+     * @param id is 1 or 2 depending whether the method was used
+     *           to initialise players names for club1 or club2
+     */
     private void initialiseTeams(int id){
         if(id == 1){
             Table teamData = getter.getPlayersStats(club1);
@@ -131,10 +156,13 @@ public class App extends JFrame{
     }
 
 
+    /**
+     * Constructor used to implement the app and user interface
+     */
     public App(){
+        // Inicjalizacja danych
         this.getter = new PlayersStatsGetter();
         initialiseData();
-
         panelMain = new mainPanel();
         panelMain.add(panelChoose);
 
@@ -233,15 +261,7 @@ public class App extends JFrame{
             }
         });
 
-        comboBox5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedPlotType = (String) comboBox4.getSelectedItem();
-                if (selectedPlotType != null) {
-                    thePlotType = selectedPlotType;
-                }
-            }
-        });
+
 
         comboBox6.addActionListener(new ActionListener() {
             @Override
@@ -250,6 +270,7 @@ public class App extends JFrame{
                 if (selectedClub != null) {
                     club1 = selectedClub;
                     initialiseTeams(1);
+                    player1 = playerNames1.get(0);
                 }
             }
         });
@@ -271,6 +292,7 @@ public class App extends JFrame{
                 if (selectedClub != null) {
                     club2 = selectedClub;
                     initialiseTeams(2);
+                    player2 = playerNames2.get(0);
                 }
             }
         });
@@ -285,16 +307,6 @@ public class App extends JFrame{
             }
         });
 
-        comboBox10.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedPlotType = (String) comboBox4.getSelectedItem();
-                if (selectedPlotType != null) {
-                    thePlotType = selectedPlotType;
-                }
-            }
-        });
-
         comboBox11.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -305,25 +317,7 @@ public class App extends JFrame{
             }
         });
 
-        comboBox12.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedColumn = (String) comboBox12.getSelectedItem();
-                if (selectedColumn != null) {
-                    column = selectedColumn;
-                }
-            }
-        });
 
-        comboBox13.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedColumn = (String) comboBox13.getSelectedItem();
-                if (selectedColumn != null) {
-                    column = selectedColumn;
-                }
-            }
-        });
 
         stwórzWykresButton2.addActionListener(new ActionListener() {
             @Override

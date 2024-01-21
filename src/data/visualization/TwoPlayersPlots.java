@@ -57,9 +57,10 @@ public class TwoPlayersPlots {
             }
             else
             {
-                int asc = (int) str.charAt(0);
+                String str2 = str.replace(",", ".");
+                int asc = (int) str2.charAt(0);
                 if (asc > 47 && asc < 58) {
-                    listad.add(Double.valueOf(str));
+                    listad.add(Double.valueOf(str2));
                 }
             }
         }
