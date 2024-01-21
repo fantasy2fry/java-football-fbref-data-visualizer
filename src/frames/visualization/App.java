@@ -1,6 +1,7 @@
 package frames.visualization;
 
 import data.collect.PlayersStatsGetter;
+import data.visualization.TwoPlayersPlots;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.plotly.Plot;
 import tech.tablesaw.plotly.components.Figure;
@@ -51,6 +52,7 @@ public class App extends JFrame{
     private String club2;
     private String thePlotType;
     private String column;
+    private String characteristic;
     private String player1;
     private String player2;
     private Map<String, List<String>> footballTeams;
@@ -83,15 +85,18 @@ public class App extends JFrame{
             comboBox6.addItem(club);
             comboBox8.addItem(club);
         }
-        this.columnNames = getter.getImportantColumnNamesFromTable(getter.getPlayersStats("Real Madrid - Season 23/24"));
-        for (String column : columnNames){
-            comboBox11.addItem(column);
+        TwoPlayersPlots twoPlayersPlots = new TwoPlayersPlots();
+        this.columnNames = twoPlayersPlots.columnNames;
+        for (String characteristic : columnNames){
+            if(characteristic != "n"){
+                comboBox11.addItem(characteristic);
+            }
         }
         // Ustalenie domyślnych danych
         club1 = clubNames.get(0);
         club2 = clubNames.get(0);
         thePlotType = plotTypes.get(0);
-        column = columnNames.get(0);
+        characteristic = columnNames.get(4);
     }
 
     /**
@@ -107,6 +112,25 @@ public class App extends JFrame{
             return Integer.parseInt(matcher.group());
         } else {
             return -1;
+        }
+    }
+
+    /**
+     * Method used to transform name of the characteristic to name of the column from the data table
+     * @param characteristic is the name of characteristic chosen by the user
+     * @return String of the original column name
+     */
+    public String characteristicToColumn(String characteristic){
+        TwoPlayersPlots twoPlayersPlots = new TwoPlayersPlots();
+        List<String> characteristics = twoPlayersPlots.columnNames;
+        //remove 4 first elements
+        characteristics = characteristics.subList(4, characteristics.size());
+        List<String> columns = getter.getImportantColumnNamesFromTable(getter.getPlayersStats("Real Madrid - Season 23/24"));
+        int characteristicIndex = characteristics.indexOf(characteristic);
+        if (characteristicIndex != -1 && characteristicIndex < columns.size()) {
+            return columns.get(characteristicIndex);
+        } else {
+            return null;
         }
     }
 
@@ -297,9 +321,9 @@ public class App extends JFrame{
         comboBox11.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String selectedColumn = (String) comboBox11.getSelectedItem();
-                if (selectedColumn != null) {
-                    column = selectedColumn;
+                String selectedCharacteristic = (String) comboBox11.getSelectedItem();
+                if (selectedCharacteristic != null) {
+                    characteristic = selectedCharacteristic;
                 }
             }
         });
