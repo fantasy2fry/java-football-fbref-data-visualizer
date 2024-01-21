@@ -1,23 +1,24 @@
 package frames.visualization;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * This class is used to generate the title page of the application.
+ */
 public class mainPanel extends JPanel {
     private Image backgroundImage;
-    public JButton startButton;
 
     public mainPanel() {
-        // Załaduj obraz w tle
+        //załadowanie obrazu w tle
         try {
             backgroundImage = ImageIO.read(getClass().getResource("/background1.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // Ustawienie layoutu panelu na GridBagLayout
+        // Ustawienie layoutu panelu
         setLayout(new GridBagLayout());
 
         // Tworzenie i konfiguracja etykiety z tytułem
@@ -35,10 +36,9 @@ public class mainPanel extends JPanel {
         add(titleLabel, gbcTitle);
 
         // Tworzenie i konfiguracja etykiety z informacjami o autorach
-        JLabel authorsLabel = new JLabel("<html>Authors:<br>Antoni Kingston<br>Dominika Gimzicka<br>Norbert Frydrysiak<br>Jan Opala</html>");
+        JLabel authorsLabel = new JLabel("<html>Authors:<br>Antoni Kingston<br>Dominika Gimzicka<br>Jan Opala<br>Norbert Frydrysiak</html>");
         authorsLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
         authorsLabel.setHorizontalAlignment(SwingConstants.LEFT);
-
         GridBagConstraints gbcAuthors = new GridBagConstraints();
         gbcAuthors.gridx = 0;
         gbcAuthors.gridy = 2;
@@ -52,7 +52,6 @@ public class mainPanel extends JPanel {
         JLabel descriptionLabel = new JLabel("<html>The application is designed to generate football analyses.<br>All data used for these analyses have been sourced from the website https://fbref.com/en/</html>");
         descriptionLabel.setFont(new Font("SansSerif", Font.PLAIN, 20));
         descriptionLabel.setHorizontalAlignment(SwingConstants.LEFT);
-
         GridBagConstraints gbcDescription = new GridBagConstraints();
         gbcDescription.gridx = 0;
         gbcDescription.gridy = 2;
@@ -61,29 +60,11 @@ public class mainPanel extends JPanel {
         gbcDescription.anchor = GridBagConstraints.LAST_LINE_START;
         gbcDescription.insets = new Insets(10, 20, 10, 0);
         add(descriptionLabel, gbcDescription);
-
-        /*
-        // Tworzenie i konfiguracja przycisku START
-        startButton = new JButton("START");
-        startButton.setPreferredSize(new Dimension(320, 130));
-        startButton.setFont(new Font("Arial", Font.BOLD, 80));
-        startButton.setFocusPainted(false);
-        startButton.setForeground(Color.BLACK); // Kolor tekstu przycisku na czarny
-        startButton.setOpaque(false); // Ustawienie przycisku jako nieprzezroczystego
-        startButton.setContentAreaFilled(false); // Wyłączenie wypełnienia tła
-        startButton.setBorder(new LineBorder(Color.BLACK, 7)); // Czarne obramowanie
-        startButton.setToolTipText("Click to start");
-        GridBagConstraints gbcButton = new GridBagConstraints();
-        gbcButton.gridx = 0;
-        gbcButton.gridy = 0;
-        gbcButton.weightx = 1;
-        gbcButton.weighty = 1;
-        gbcButton.fill = GridBagConstraints.NONE;
-        gbcButton.anchor = GridBagConstraints.CENTER;
-        panelMain.add(startButton, gbcButton);
-        */
     }
 
+    /**
+     * This method is used to place a background image in the application.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -98,10 +79,5 @@ public class mainPanel extends JPanel {
 
             g2d.dispose();
         }
-
-    }
-
-    public JButton getStartButton() {
-        return startButton;
     }
 }
