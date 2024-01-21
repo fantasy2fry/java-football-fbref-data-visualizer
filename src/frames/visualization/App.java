@@ -123,6 +123,8 @@ public class App extends JFrame{
     public String characteristicToColumn(String characteristic){
         TwoPlayersPlots twoPlayersPlots = new TwoPlayersPlots();
         List<String> characteristics = twoPlayersPlots.columnNames;
+        //remove 4 first elements
+        characteristics = characteristics.subList(4, characteristics.size());
         List<String> columns = getter.getImportantColumnNamesFromTable(getter.getPlayersStats("Real Madrid - Sezon 23/24"));
         int characteristicIndex = characteristics.indexOf(characteristic);
         if (characteristicIndex != -1 && characteristicIndex < columns.size()) {
