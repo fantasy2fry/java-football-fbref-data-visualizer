@@ -1,23 +1,18 @@
 package data.visualization;
 
-import data.collect.PlayersStatsGetter;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
-import tech.tablesaw.columns.numbers.NumberColumnFormatter;
 import tech.tablesaw.plotly.Plot;
 import tech.tablesaw.plotly.api.HorizontalBarPlot;
 import tech.tablesaw.plotly.api.VerticalBarPlot;
 import tech.tablesaw.plotly.components.Layout;
 import tech.tablesaw.plotly.components.Figure;
-import tech.tablesaw.plotly.components.Marker;
 import tech.tablesaw.plotly.traces.BarTrace;
 import tech.tablesaw.plotly.traces.PieTrace;
 import tech.tablesaw.plotly.traces.Trace;
 import tech.tablesaw.selection.Selection;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static java.lang.Math.min;
@@ -25,7 +20,7 @@ import static java.lang.Math.min;
  * class which purpose is to provide different types of plots that help in persuading someone into believing some nonsense
  * the class operates on tables from tablesaw library
  */
-public class TwoPlayersPlots {
+public class PlotsCreater {
     /**
      * a list of nice names for columns
      */

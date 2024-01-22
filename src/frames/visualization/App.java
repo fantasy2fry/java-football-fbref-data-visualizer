@@ -1,7 +1,7 @@
 package frames.visualization;
 
 import data.collect.PlayersStatsGetter;
-import data.visualization.TwoPlayersPlots;
+import data.visualization.PlotsCreater;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.plotly.Plot;
 import tech.tablesaw.plotly.components.Figure;
@@ -12,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
-import javax.swing.border.LineBorder;
 
 /**
  * This class is used to create user interface
@@ -85,8 +84,8 @@ public class App extends JFrame{
             comboBox6.addItem(club);
             comboBox8.addItem(club);
         }
-        TwoPlayersPlots twoPlayersPlots = new TwoPlayersPlots();
-        this.columnNames = twoPlayersPlots.columnNames;
+        PlotsCreater plotsCreater = new PlotsCreater();
+        this.columnNames = plotsCreater.columnNames;
         for (String characteristic : columnNames){
             if(characteristic != "n"){
                 comboBox11.addItem(characteristic);
@@ -121,8 +120,8 @@ public class App extends JFrame{
      * @return String of the original column name
      */
     public String characteristicToColumn(String characteristic){
-        TwoPlayersPlots twoPlayersPlots = new TwoPlayersPlots();
-        List<String> characteristics = twoPlayersPlots.columnNames;
+        PlotsCreater plotsCreater = new PlotsCreater();
+        List<String> characteristics = plotsCreater.columnNames;
         //remove 4 first elements
         characteristics = characteristics.subList(4, characteristics.size());
         List<String> columns = getter.getImportantColumnNamesFromTable(getter.getPlayersStats("Real Madrid - Season 23/24"));
@@ -146,11 +145,11 @@ public class App extends JFrame{
         Table teamData = getter.getPlayersStats(club);
         int id = columnToId(column);
         if(plotType == "Pie chart"){
-            return data.visualization.TwoPlayersPlots.kolowy(teamData, id);
+            return PlotsCreater.kolowy(teamData, id);
         } else if (plotType == "Vertical bar chart") {
-            return data.visualization.TwoPlayersPlots.slupkowyPionowy(teamData, id);
+            return PlotsCreater.slupkowyPionowy(teamData, id);
         } else if (plotType == "Horizontal bar chart"){
-            return data.visualization.TwoPlayersPlots.slupkowyPoziomy(teamData, id);
+            return PlotsCreater.slupkowyPoziomy(teamData, id);
         }
         return null;
     }
@@ -340,7 +339,7 @@ public class App extends JFrame{
         stwórzWykresButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Plot.show(data.visualization.TwoPlayersPlots.twoPlayersPlot(getter.getPlayersStats(club1), getter.getPlayersStats(club2), player1, player2));
+                Plot.show(PlotsCreater.twoPlayersPlot(getter.getPlayersStats(club1), getter.getPlayersStats(club2), player1, player2));
             }
         });
         stwórzWykresButton1.addActionListener(new ActionListener() {
@@ -348,7 +347,7 @@ public class App extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 Table team1=getter.getPlayersStats(club1);
                 Table team2=getter.getPlayersStats(club2);
-                Plot.show(data.visualization.TwoPlayersPlots.twoTeamsPlot(team1,team2));
+                Plot.show(PlotsCreater.twoTeamsPlot(team1,team2));
             }
         });
     }
