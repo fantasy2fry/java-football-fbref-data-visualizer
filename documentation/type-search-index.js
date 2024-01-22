@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"frames.visualization","l":"App"},{"p":"<Unnamed>","l":"main"},{"p":"frames.visualization","l":"mainPanel"},{"p":"data.collect","l":"PlayersStatsGetter"},{"p":"data.visualization","l":"PlotsCreater"}];updateSearchResults();
