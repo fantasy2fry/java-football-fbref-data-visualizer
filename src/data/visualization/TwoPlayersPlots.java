@@ -21,9 +21,20 @@ import java.util.Collections;
 import java.util.List;
 
 import static java.lang.Math.min;
-
+/**
+ * class which purpose is to provide different types of plots that help in persuading someone into believing some nonsense
+ * the class operates on tables from tablesaw library
+ */
 public class TwoPlayersPlots {
+    /**
+     * a list of nice names for columns
+     */
     public static final ArrayList<String> columnNames = new ArrayList<String>(List.of("n","n", "n", "n","Matches Played","Matches Played From Start", "n", "Full Match Equivalent", "Goals", "Assists", "Goals + Assists", "Non-Penalty Goals", "Penalty Kicks Made", "Penalty Kicks Attempted", "Yellow Cards", "Red Cards", "Expected Goals", "Non-Penalty Expected Goals", "Expected Assisted Goals", "Non-Penalty Expected Goals + Assisted Goals", "Progressive Carries", "Progressive Passes", "Progressive Passes Received"));
+    /**
+     * Main method used for testing purposes.
+     * @param args
+     */
+
     public static void main(String[] args) {
         data.collect.PlayersStatsGetter getter = new data.collect.PlayersStatsGetter();
         Table table = getter.getPlayersStats("Barcelona - Sezon 21/22");
@@ -45,6 +56,11 @@ public class TwoPlayersPlots {
 
 
     }
+    /**
+     * as columns of frames imported by other classes come as columns of strings we need them converted to a numeric format to later be plotted
+     * @param stringColumn a StringColumn to be converted to a DoubleColumn
+     * @return DoubleColumn
+     */
     public static DoubleColumn str2dbl(StringColumn stringColumn) {
         String name = stringColumn.name();
         List<String> listas = stringColumn.asList();
@@ -68,6 +84,12 @@ public class TwoPlayersPlots {
         return dopel;
 
     }
+    /**
+     * Function that allows us to choose a column that will later be plotted, as well as formatting the table accordingly to plotting needs
+     * @param table the table on which we operate
+     * @param id id of column to be plotted
+     * @return a table that can be successfully used in plotting functions below
+     */
     public static Table ready2Plot(Table table, int id)
     {
         Column<?> pilk = table.column(0);
@@ -79,6 +101,12 @@ public class TwoPlayersPlots {
         ret=ret.where((ret.numberColumn(name).isNotEqualTo(0)));
         return ret;
     }
+    /**
+     * Function returning vertical bar plot of a given statistic from a given table
+     * @param table data
+     * @param id index of statistic to be plotted
+     * @return object of type Figure with desired plot
+     */
     public static Figure slupkowyPionowy(Table table, int id)
     {
         table=callMeMoron(table);
@@ -94,6 +122,12 @@ public class TwoPlayersPlots {
                 nazwadan);
 
     }
+    /**
+     * Function returning horizontal bar plot of a given statistic from a given table
+     * @param table data
+     * @param id index of statistic to be plotted
+     * @return object of type Figure with desired plot
+     */
     public static Figure slupkowyPoziomy(Table table, int id)
     {
         table=callMeMoron(table);
@@ -109,6 +143,12 @@ public class TwoPlayersPlots {
 
         );
     }
+    /**
+     * Function returning pie chart of a given statistic from a given table, it groups all the players but top5 together
+     * @param table data
+     * @param id index of statistic to be plotted
+     * @return object of type Figure with desired plot
+     */
     public static Figure kolowy(Table table, int id)
     {
         Table doRoboty = ready2Plot(table,id);
@@ -129,6 +169,16 @@ public class TwoPlayersPlots {
         Layout layout = Layout.builder().title(columnNames.get(id)+" by player").build();
         return new Figure(layout,trace);
     }
+
+    /**
+     * it is junk it isn't used
+     * @param table1
+     * @param table2
+     * @param id
+     * @param klub1
+     * @param klub2
+     * @return
+     */
     public static Figure slupkowyPodwojny(Table table1, Table table2, int id, String klub1, String klub2) {
         Table dr1 = ready2Plot(table1, id);
         Table dr2 = ready2Plot(table2, id);
@@ -154,6 +204,14 @@ public class TwoPlayersPlots {
 
         return new Figure(layout,(Trace)trace);
     }
+
+    /**
+     * and so is it
+     * @param nazwa
+     * @param parametr
+     * @param licz
+     * @return
+     */
     public static StringColumn kolumienka(String nazwa, String parametr, int licz)
     {
         List<String> chlop=new ArrayList<>();
@@ -163,6 +221,12 @@ public class TwoPlayersPlots {
         }
         return StringColumn.create(nazwa,chlop);
     }
+    /**
+     * another version of a function above named the same, it allows for choosing multiple statistics
+     * @param t table on which shenanigans are conducted
+     * @param ids a List of ids of parameters to be selected into output table
+     * @return output table
+     */
     public static Table ready2Plot(Table t,List<Integer> ids){
         Column<?> names=t.column(0);
         Table ret=Table.create(names);
@@ -191,6 +255,12 @@ public class TwoPlayersPlots {
         }
         return ret;
     }
+
+    /**
+     * function used to rename columns
+     * @param table object on which we operate
+     * @return table with different column names
+     */
     public static Table callMeMoron(Table table)
     {
         for(int i=4; i<23; i++)
@@ -202,6 +272,12 @@ public class TwoPlayersPlots {
         }
         return table;
     }
+
+    /**
+     * Function for transposing tables
+     * @param t input table
+     * @return output table t^t
+     */
     public static Table twoPlayersPlotTranspose(Table t){
         //take column names
         List<String> names=t.columnNames();
@@ -221,6 +297,15 @@ public class TwoPlayersPlots {
         t.addColumns(namesColumn);
         return t;
     }
+
+    /**
+     * Function creating bar plot for some statistics in given tables for given players
+     * @param table1 table of team of player1
+     * @param table2 table of team of player2
+     * @param player1 a String name, of player1
+     * @param player2 a String name, of player1
+     * @return he who in the moment of the greatest despair achieves the bravery to run this function meets with the indescribable beauty of its output
+     */
 
     public static Figure twoPlayersPlot(Table table1, Table table2, String player1, String player2){
         // from first table take row with player1 in first column
@@ -250,6 +335,13 @@ public class TwoPlayersPlots {
                 columnNames2
         );
     }
+
+    /**
+     * another plotting mess, it sums some statistics for 2 teams and then for both of them it plots
+     * @param team1 table of team1
+     * @param team2 table of team2
+     * @return I only believe in statistics I have doctored myself.
+     */
     public static Figure twoTeamsPlot(Table team1, Table team2)
     {
         team1=callMeMoron(team1);
